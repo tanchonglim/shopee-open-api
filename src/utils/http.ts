@@ -25,32 +25,11 @@ export default class HttpClient {
       baseURL: host,
     });
 
-    instance.interceptors.request.use(
-      function (config) {
-        const parsed = queryString.parseUrl("/api/v2/" + config.url);
-        config.url = generateQueryParams(parsed.url, partner_id.toString(), partner_key) + "&" + queryString.stringify(parsed.query);
-        return config;
-      },
-      function (error) {
-        // Do something with request error
-        return Promise.reject(error);
-      }
-    );
-
-    // Add a response interceptor
-    instance.interceptors.response.use(
-      function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
-        // Do something with response data
-        return response;
-      },
-      function (error) {
-        console.log("http error");
-        // Any status codes that falls outside the range of 2xx cause this function to trigger
-        // Do something with response error
-        return Promise.reject(error);
-      }
-    );
+    instance.interceptors.request.use(function (config) {
+      const parsed = queryString.parseUrl("/api/v2/" + config.url);
+      config.url = generateQueryParams(parsed.url, partner_id.toString(), partner_key) + "&" + queryString.stringify(parsed.query);
+      return config;
+    });
     return instance;
   }
 
@@ -67,26 +46,18 @@ export default class HttpClient {
     partner_key: string;
     shop_id: number;
     onGetAccessToken: () => Promise<string>;
-    onRefreshAccessToken: () => Promise<string>;
+    onRefreshAccessToken?: () => Promise<string>;
   }): AxiosInstance {
-    let refreshTokenPromise: Promise<string>;
-
     const instance = axios.create({
       baseURL: host,
     });
 
-    instance.interceptors.request.use(
-      async function (config) {
-        const parsed = queryString.parseUrl("/api/v2/" + config.url);
-        const token = await onGetAccessToken();
-        config.url = generateQueryParams(parsed.url, partner_id.toString(), partner_key, token, shop_id) + "&" + queryString.stringify(parsed.query);
-        return config;
-      },
-      function (error) {
-        // Do something with request error
-        return Promise.reject(error);
-      }
-    );
+    instance.interceptors.request.use(async function (config) {
+      const parsed = queryString.parseUrl("/api/v2/" + config.url);
+      const token = await onGetAccessToken();
+      config.url = generateQueryParams(parsed.url, partner_id.toString(), partner_key, token, shop_id) + "&" + queryString.stringify(parsed.query);
+      return config;
+    });
 
     // Add a response interceptor
     instance.interceptors.response.use(
@@ -94,11 +65,8 @@ export default class HttpClient {
         return response;
       },
       async function (error) {
-        if (error.response.data.error == "error_auth") {
-          if (!refreshTokenPromise) refreshTokenPromise = onRefreshAccessToken();
-
-          const newToken = await refreshTokenPromise;
-          refreshTokenPromise = null;
+        if (error.response.data.error == "error_auth" && onRefreshAccessToken) {
+          const newToken = await onRefreshAccessToken();
 
           const currentUrl = error.config.url;
           let parsedUrl = queryString.parseUrl(currentUrl);
@@ -110,7 +78,8 @@ export default class HttpClient {
           delete parsedUrl.query["timestamp"];
 
           let config = error.config;
-          config.url = generateQueryParams(parsedUrl.url, partner_id.toString(), partner_key, newToken, shop_id) + "&" + queryString.stringify(parsedUrl.query);
+          config.url =
+            generateQueryParams(parsedUrl.url, partner_id.toString(), partner_key, newToken, shop_id) + "&" + queryString.stringify(parsedUrl.query);
 
           return axios.request(config);
         }

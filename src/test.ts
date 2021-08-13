@@ -34,6 +34,7 @@ dotenv.config();
         return access_token;
       },
     });
+
     // const result = await shop.Product.getCategory();
     // shop.Order.cancelOrder({ cancel_reason: CANCEL_REASON.COD_NOT_SUPPORTED, item_list: [], order_sn: "" });
 

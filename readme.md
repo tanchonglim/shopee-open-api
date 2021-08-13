@@ -6,10 +6,16 @@ Right now only support Shop API, no Merchant API available.
 
 ## How to use?
 
-Import
+Importing only main module
 
 ```ts
 import ShopeeOpenApi from "shopee-open-api";
+```
+
+Importing constants
+
+```ts
+import ShopeeOpenApi, { ORDER_STATUS, RETURN_STATUS } from "shopee-open-api";
 ```
 
 Create ShopeeOpenAPi instance
@@ -23,7 +29,7 @@ const shopee = ShopeeOpenAPI({
 });
 ```
 
-Methods under ShopeeOpenAPI
+Common methods under ShopeeOpenAPI
 
 ```ts
 const authUrl = shopee.getAuthLink();
@@ -43,20 +49,23 @@ const { access_token, refresh_token } = await shopee.refreshAccessToken({
 const result = await shopee.getShopsByPartner();
 ```
 
-This api also provide convenient callbacks for handling tokens. `onRefreshAccessToken` will be called when server returns `error_auth`
+Creating `Shop` instance
+
+> You can OPTIONALLY pass a callback function to `onRefreshAccessToken` which will be called when server returns `error_auth`
 
 ```ts
 const shop = shopee.createShop({
   shop_id: 12345,
   onGetAccessToken: async () => {
-    //get access token from db
+    //get access_token from DB
     return "access_token";
   },
   onRefreshAccessToken: async () => {
+    //OPTIONAL
     //you might want to have some logic here to prevent multiple calls to refresh access token
-    //get refresh token from db
+    //get refresh_token from DB
     const { access_token, refresh_token } = await shopee.refreshAccessToken({ refresh_token: "refresh_token", shop_id: 12345 });
-    //store new refresh token & access token
+    //store new refresh_token & access_token to DB
     return access_token;
   },
 });
@@ -68,7 +77,7 @@ API under Shop module can be accessed directly via `Shop`
 const result = await shop.getShopInfo();
 ```
 
-API from other modules can be access by accessing the attributes from `Shop`
+API from other modules can be accessed via the attributes under `Shop`
 
 ```ts
 //Order module
@@ -106,5 +115,3 @@ const { response } = await shop.Chat.getMessage({ conversation_id: 12344 });
 - Push
 
 > For more details, please refer to the official website of [Shopee Open API](https://open.shopee.com/).
-
-> Some methods are not tested, use at your own risk. Feel free to contribute on github.

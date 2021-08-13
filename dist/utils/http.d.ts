@@ -12,6 +12,6 @@ export default class HttpClient {
         partner_key: string;
         shop_id: number;
         onGetAccessToken: () => Promise<string>;
-        onRefreshAccessToken: () => Promise<string>;
+        onRefreshAccessToken?: () => Promise<string>;
     }): AxiosInstance;
 }

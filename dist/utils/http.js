@@ -41,25 +41,10 @@ class HttpClient {
             const parsed = query_string_1.default.parseUrl("/api/v2/" + config.url);
             config.url = generateQueryParams(parsed.url, partner_id.toString(), partner_key) + "&" + query_string_1.default.stringify(parsed.query);
             return config;
-        }, function (error) {
-            // Do something with request error
-            return Promise.reject(error);
-        });
-        // Add a response interceptor
-        instance.interceptors.response.use(function (response) {
-            // Any status code that lie within the range of 2xx cause this function to trigger
-            // Do something with response data
-            return response;
-        }, function (error) {
-            console.log("http error");
-            // Any status codes that falls outside the range of 2xx cause this function to trigger
-            // Do something with response error
-            return Promise.reject(error);
         });
         return instance;
     }
     static shopApiInstance({ host, partner_id, partner_key, shop_id, onGetAccessToken, onRefreshAccessToken, }) {
-        let refreshTokenPromise;
         const instance = axios_1.default.create({
             baseURL: host,
         });
@@ -70,20 +55,14 @@ class HttpClient {
                 config.url = generateQueryParams(parsed.url, partner_id.toString(), partner_key, token, shop_id) + "&" + query_string_1.default.stringify(parsed.query);
                 return config;
             });
-        }, function (error) {
-            // Do something with request error
-            return Promise.reject(error);
         });
         // Add a response interceptor
         instance.interceptors.response.use(function (response) {
             return response;
         }, function (error) {
             return __awaiter(this, void 0, void 0, function* () {
-                if (error.response.data.error == "error_auth") {
-                    if (!refreshTokenPromise)
-                        refreshTokenPromise = onRefreshAccessToken();
-                    const newToken = yield refreshTokenPromise;
-                    refreshTokenPromise = null;
+                if (error.response.data.error == "error_auth" && onRefreshAccessToken) {
+                    const newToken = yield onRefreshAccessToken();
                     const currentUrl = error.config.url;
                     let parsedUrl = query_string_1.default.parseUrl(currentUrl);
                     delete parsedUrl.query["access_token"];
@@ -92,7 +71,8 @@ class HttpClient {
                     delete parsedUrl.query["sign"];
                     delete parsedUrl.query["timestamp"];
                     let config = error.config;
-                    config.url = generateQueryParams(parsedUrl.url, partner_id.toString(), partner_key, newToken, shop_id) + "&" + query_string_1.default.stringify(parsedUrl.query);
+                    config.url =
+                        generateQueryParams(parsedUrl.url, partner_id.toString(), partner_key, newToken, shop_id) + "&" + query_string_1.default.stringify(parsedUrl.query);
                     return axios_1.default.request(config);
                 }
                 // Any status codes that falls outside the range of 2xx cause this function to trigger

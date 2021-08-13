@@ -7,17 +7,17 @@ import { Returns } from "./Returns";
 import { Product } from "./Product";
 
 export class Shop {
-  protected host: string;
-  protected partner_id: number;
-  protected partner_key: string;
-  protected shop_id: number;
+  // protected host: string;
+  // protected partner_id: number;
+  // protected partner_key: string;
+  // protected shop_id: number;
   protected http: AxiosInstance;
 
   private _order: Order;
-  public _chat: Chat;
-  public _logistics: Logistics;
-  public _returns: Returns;
-  public _product: Product;
+  private _chat: Chat;
+  private _logistics: Logistics;
+  private _returns: Returns;
+  private _product: Product;
 
   get Order() {
     if (!this._order) this._order = new Order(this.http);
@@ -46,12 +46,12 @@ export class Shop {
     partner_key: string;
     shop_id: number;
     onGetAccessToken: () => Promise<string>;
-    onRefreshAccessToken: () => Promise<string>;
+    onRefreshAccessToken?: () => Promise<string>;
   }) {
-    this.host = params.host;
-    this.partner_id = params.partner_id;
-    this.partner_key = params.partner_key;
-    this.shop_id = params.shop_id;
+    // this.host = params.host;
+    // this.partner_id = params.partner_id;
+    // this.partner_key = params.partner_key;
+    // this.shop_id = params.shop_id;
 
     this.http = HttpClient.shopApiInstance({
       host: params.host,

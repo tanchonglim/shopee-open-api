@@ -21,10 +21,10 @@ const Returns_1 = require("./Returns");
 const Product_1 = require("./Product");
 class Shop {
     constructor(params) {
-        this.host = params.host;
-        this.partner_id = params.partner_id;
-        this.partner_key = params.partner_key;
-        this.shop_id = params.shop_id;
+        // this.host = params.host;
+        // this.partner_id = params.partner_id;
+        // this.partner_key = params.partner_key;
+        // this.shop_id = params.shop_id;
         this.http = http_1.default.shopApiInstance({
             host: params.host,
             partner_id: params.partner_id,

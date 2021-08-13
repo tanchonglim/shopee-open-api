@@ -61,7 +61,7 @@ declare class _ShopeeOpenAPI {
     }>;
     createShop(params: {
         onGetAccessToken: () => Promise<string>;
-        onRefreshAccessToken: () => Promise<string>;
+        onRefreshAccessToken?: () => Promise<string>;
         shop_id: number;
     }): Shop;
 }

@@ -90,7 +90,7 @@ class _ShopeeOpenAPI {
     return result.data;
   }
 
-  createShop(params: { onGetAccessToken: () => Promise<string>; onRefreshAccessToken: () => Promise<string>; shop_id: number }): Shop {
+  createShop(params: { onGetAccessToken: () => Promise<string>; onRefreshAccessToken?: () => Promise<string>; shop_id: number }): Shop {
     return new Shop({ host: this.host, partner_id: this.partner_id, partner_key: this.partner_key, ...params });
   }
 }

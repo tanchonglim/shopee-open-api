@@ -5,16 +5,12 @@ import { Order } from "./Order";
 import { Returns } from "./Returns";
 import { Product } from "./Product";
 export declare class Shop {
-    protected host: string;
-    protected partner_id: number;
-    protected partner_key: string;
-    protected shop_id: number;
     protected http: AxiosInstance;
     private _order;
-    _chat: Chat;
-    _logistics: Logistics;
-    _returns: Returns;
-    _product: Product;
+    private _chat;
+    private _logistics;
+    private _returns;
+    private _product;
     get Order(): Order;
     get Chat(): Chat;
     get Logistics(): Logistics;
@@ -26,7 +22,7 @@ export declare class Shop {
         partner_key: string;
         shop_id: number;
         onGetAccessToken: () => Promise<string>;
-        onRefreshAccessToken: () => Promise<string>;
+        onRefreshAccessToken?: () => Promise<string>;
     });
     getShopInfo(): Promise<{
         shop_name: string;
