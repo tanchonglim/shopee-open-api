@@ -53,8 +53,8 @@ export declare class Product {
     getItemList(params: {
         offset: number;
         page_size: number;
-        update_time_from: number;
-        update_time_to: number;
+        update_time_from?: number;
+        update_time_to?: number;
         item_status: ITEM_STATUS[];
     }): Promise<{
         error: string;

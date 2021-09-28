@@ -26,15 +26,15 @@ export declare class Logistics {
         pickup?: {
             address_id: number;
             pickup_time_id: string;
-            tracking_number: string;
+            tracking_number?: string;
         };
         dropoff?: {
             branch_id: number;
             sender_real_name: string;
-            tracking_number: string;
+            tracking_number?: string;
         };
         non_integrated?: {
-            tracking_number: string;
+            tracking_number?: string;
         };
     }): Promise<{
         error: string;
