@@ -33,14 +33,14 @@ dotenv_1.default.config();
         //   shop_id: 5304,
         // });
         const shop = shopee.createShop({
-            shop_id: 18589,
+            shop_id: 22943,
             onGetAccessToken: () => __awaiter(void 0, void 0, void 0, function* () {
                 //get access token from db
-                return "23e655805ca2a747d830213ef247a8fe";
+                return "6324e6ea9e6c51f1ea86f2444f657dce";
             }),
             onRefreshAccessToken: () => __awaiter(void 0, void 0, void 0, function* () {
                 //get refresh token from db
-                const { access_token, refresh_token } = yield shopee.refreshAccessToken({ refresh_token: "refresh_token", shop_id: 18589 });
+                const { access_token, refresh_token } = yield shopee.refreshAccessToken({ refresh_token: "refresh_token", shop_id: 22943 });
                 //store new refresh token & access token
                 return access_token;
             }),
@@ -51,6 +51,8 @@ dotenv_1.default.config();
         // const { response } = await shop.Chat.getMessage({ conversation_id: 12344 });
         // const result = await shop.Chat.getMessage({ conversation_id: 22780506543289 });
         // console.log(result2.response);
+        // const a = await shop.Product.getItemBaseInfo({ item_id_list: [101551196, 101551197] });
+        // console.log(a);
         // console.log(result);
     }
     catch (error) {

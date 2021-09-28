@@ -68,7 +68,9 @@ export class Product {
   }): Promise<{ error: string; message: string; response: any; warning: any; request_id: string }> {
     const apiPath = "product/get_item_base_info";
     const result = await this.http.get(apiPath, {
-      params,
+      params: {
+        item_id_list: params.item_id_list.join(","),
+      },
     });
     return result.data;
   }
@@ -78,7 +80,9 @@ export class Product {
   }): Promise<{ error: string; message: string; response: any; warning: any; request_id: string }> {
     const apiPath = "product/get_item_extra_info";
     const result = await this.http.get(apiPath, {
-      params,
+      params: {
+        item_id_list: params.item_id_list.join(","),
+      },
     });
     return result.data;
   }

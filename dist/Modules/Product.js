@@ -70,7 +70,9 @@ class Product {
         return __awaiter(this, void 0, void 0, function* () {
             const apiPath = "product/get_item_base_info";
             const result = yield this.http.get(apiPath, {
-                params,
+                params: {
+                    item_id_list: params.item_id_list.join(","),
+                },
             });
             return result.data;
         });
@@ -79,7 +81,9 @@ class Product {
         return __awaiter(this, void 0, void 0, function* () {
             const apiPath = "product/get_item_extra_info";
             const result = yield this.http.get(apiPath, {
-                params,
+                params: {
+                    item_id_list: params.item_id_list.join(","),
+                },
             });
             return result.data;
         });
