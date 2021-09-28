@@ -24,14 +24,14 @@ export class Logistics {
     pickup?: {
       address_id: number;
       pickup_time_id: string;
-      tracking_number: string;
+      tracking_number?: string;
     };
     dropoff?: {
       branch_id: number;
       sender_real_name: string;
-      tracking_number: string;
+      tracking_number?: string;
     };
-    non_integrated?: { tracking_number: string };
+    non_integrated?: { tracking_number?: string };
   }): Promise<{ error: string; message: string; request_id: string }> {
     const apiPath = "logistics/ship_order";
     const result = await this.http.post(apiPath, params);

@@ -52,8 +52,8 @@ export class Product {
   async getItemList(params: {
     offset: number;
     page_size: number;
-    update_time_from: number;
-    update_time_to: number;
+    update_time_from?: number;
+    update_time_to?: number;
     item_status: ITEM_STATUS[];
   }): Promise<{ error: string; message: string; response: any; warning: any; request_id: string }> {
     const apiPath = "product/get_item_list";
